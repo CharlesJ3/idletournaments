@@ -1,13 +1,162 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  font-family:'Rubik Mono One', sans-serif, Arial;
+  font-size: 16px;
+  line-height: 1.5;
+  color: black;
+  padding: 1%;
 }
+
+#app {
+  border: 4px solid black;
+  width: 1200px;
+  height: 900px;
+  text-align: center;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Sections */
+/*
+*   Header
+*/ 
+.header {
+  border: 4px solid black;
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: 0%;
+}
+
+/*
+*   Header / Options
+*/ 
+.options {
+  border: 4px solid black;
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: 10%;
+}
+
+.optionSelect {
+  width: 33.5%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  padding: 1.35%;
+}
+
+div#option1 {
+  position: absolute;
+  left: 0;
+  font-size: 2em;
+  font-weight: bold;
+  border: 4px solid red;
+}
+
+div#option2 {
+  position: absolute;
+  font-weight: bold;
+  font-size: 2em;
+  border: 4px solid green;
+  left: 33.5%;
+}
+
+div#option3 {
+  position: absolute;
+  font-weight: bold;
+  font-size: 2em;
+  border: 4px solid blue;
+  left: 66.5%;
+}
+/*
+*   Combat 
+*/ 
+.combat {
+  border: 4px solid black;
+  position: absolute;
+  width: 100%;
+  height: 60%;
+  top: 20%;
+}
+
+/*
+*   CombatLog
+*/ 
+.combatLog {
+  /* border: 4px solid black;
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  top: 80%; */
+}
+
+/*
+*   Player Team
+*/ 
+.playerTeam {
+  border-left: 4px solid teal;
+  border-top: 4px solid teal;
+  border-bottom: 4px solid teal;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+}
+
+.player {
+  width: 65%;
+  height: 13.5%;
+}
+
+#player1 {
+  position: absolute;
+  top: 1%;
+}
+
+#player2 {
+  position: absolute;
+  top: 15%;
+}
+
+#player3 {
+  position: absolute;
+  top: 30%;
+}
+
+#player4 {
+  position: absolute;
+  top: 45%;
+}
+
+#player5 {
+  position: absolute;
+  top: 60%;
+}
+
+#player6 {
+  position: absolute;
+  top: 75%;
+}
+/*
+*   Enemy Team
+*/ 
+
+.enemyTeam {
+  border-right: 4px solid red;
+  border-top: 4px solid red;
+  border-bottom: 4px solid red;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+/*Progress*/
