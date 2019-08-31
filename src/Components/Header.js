@@ -10,7 +10,13 @@ const Header = (props) => {
 
   return (
     <div className="header">
-      <h3>{gameInfo.version} -|- {gameInfo.title} -|- Settings</h3>
+      <h3>
+        {gameInfo.version} 
+        <span className="titleFun">        |-|-|-|-|-|-|-|</span> 
+        {gameInfo.title} 
+        <span className="titleFun">|-|-|-|-|-|</span>
+        Settings
+      </h3>
       {/* {props.children} */}
     </div>
   );

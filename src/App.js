@@ -1,9 +1,8 @@
 import React from 'react';
 import Header from '../src/Components/Header';
 import Settings from '../src/Components/Settings';
-import Combat from '../src/Components/Combat';
-import CombatLog from '../src/Components/CombatLog';
 import Options from '../src/Components/Options';
+import AllToons from '../src/Components/AllToons';
 
 function App() {
   return (
@@ -16,10 +15,9 @@ function App() {
       <Options />
 
       {/* Combat */}
-      <Combat>
-        <CombatLog />
-      </Combat>
+      <AllToons>
 
+      </AllToons>
       {/* Loot */}
 
     </div>

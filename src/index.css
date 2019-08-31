@@ -1,3 +1,46 @@
+/*
+* Animations
+*/
+@keyframes glowBG {
+	0% {
+		background-position: 0 0;
+	}
+	50% {
+		background-position: 150% 0;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+
+@keyframes statSkillSelection {
+  0% {
+    box-shadow: 5px 5px 1px red;
+    border: 3px solid red;
+    border-bottom: 13px solid white;
+	}
+	25% {
+    box-shadow: -5px 5px 1px red;
+    border: 3px solid red;
+    border-left: 13px solid white;
+	}
+	50% {
+    box-shadow: -5px -5px 1px red;
+    border: 3px solid red;
+    border-top: 13px solid white;
+	}
+	75% {
+    box-shadow: 5px -5px 1px red;
+    border: 3px solid red;
+    border-right: 13px solid white;
+	}
+	100% {
+    box-shadow: 5px 5px 1px red;
+    border: 3px solid red;
+    border-bottom: 13px solid white;
+	}
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +53,14 @@ body {
   line-height: 1.5;
   color: black;
   padding: 1%;
+
+  /*Stops users from highlighting, helps visuals a bit so everything isn't anchor blue*/
+  -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+     -khtml-user-select: none; 
+       -moz-user-select: none; 
+        -ms-user-select: none; 
+            user-select: none; 
 }
 
 #app {
@@ -26,22 +77,28 @@ body {
 *   Header
 */ 
 .header {
-  border: 4px solid black;
   position: absolute;
   width: 100%;
   height: 10%;
-  top: 0%;
+  top: 0%; 
+  border-bottom: 5px solid black;
+  box-shadow: 1px 1px 3px white;
+}
+
+.header h3 {
+  border-bottom: 7px solid black;
+  box-shadow: 1px 1px 3px white;
 }
 
 /*
-*   Header / Options
+*   Options
 */ 
 .options {
   border: 4px solid black;
   position: absolute;
   width: 100%;
   height: 10%;
-  top: 10%;
+  top: 9%;
 }
 
 .optionSelect {
@@ -75,15 +132,19 @@ div#option3 {
   border: 4px solid blue;
   left: 66.5%;
 }
+
+span.titleFun {
+  padding: 5%;
+}
+
 /*
 *   Combat 
 */ 
 .combat {
-  border: 4px solid black;
   position: absolute;
   width: 100%;
-  height: 60%;
-  top: 20%;
+  height: 80%;
+  top: 18.5%;
 }
 
 /*
@@ -100,63 +161,445 @@ div#option3 {
 /*
 *   Player Team
 */ 
-.playerTeam {
+.team {
   border-left: 4px solid teal;
   border-top: 4px solid teal;
   border-bottom: 4px solid teal;
   position: absolute;
-  width: 50%;
+  width: 100%;
   height: 100%;
   top: 0;
 }
 
 .player {
-  width: 65%;
-  height: 13.5%;
+  width: 40%;
+  padding-left: 1%;
+  height: 4%;
+  padding-top: .12%;
+  text-align: left;
+  color: white;
+  font-size: 1.25em;
+  box-shadow: 1px 2px 1px black;
+  text-shadow: 3px 2px 0px black;
+  background-color: rgba(0,0,0,1);
 }
 
-#player1 {
+.enemy {
   position: absolute;
-  top: 1%;
+  left: 60%;
+  text-align: right;
+  color: white;
+  font-size: 1.15em;
+  text-shadow: 2px 2px 2px black;
+  width: 40%;
+  padding-top: .12%;
+  height: 4%;
+  padding-right: 1%;
+  background-color: rgba(0,0,0);
 }
 
-#player2 {
+#player1, #enemy1 {
   position: absolute;
-  top: 15%;
-}
-
-#player3 {
-  position: absolute;
-  top: 30%;
-}
-
-#player4 {
-  position: absolute;
-  top: 45%;
-}
-
-#player5 {
-  position: absolute;
-  top: 60%;
-}
-
-#player6 {
-  position: absolute;
-  top: 75%;
-}
-/*
-*   Enemy Team
-*/ 
-
-.enemyTeam {
-  border-right: 4px solid red;
-  border-top: 4px solid red;
-  border-bottom: 4px solid red;
-  position: absolute;
-  width: 50%;
-  height: 100%;
   top: 0;
-  right: 0;
+}
+
+#player2, #enemy2  {
+  position: absolute;
+  top: 17%;
+}
+
+#player3, #enemy3  {
+  position: absolute;
+  top: 34%;
+}
+
+#player4, #enemy4  {
+  position: absolute;
+  top: 51%;
+}
+
+#player5, #enemy5  {
+  position: absolute;
+  top: 68%;
+}
+
+#player6, #enemy6  {
+  position: absolute;
+  top: 85%;
 }
 
 /*Progress*/
+.rotateMe {
+  transform: rotate(-360deg) scaleX(-1);
+}
+
+.playerInactive {
+  opacity: .05;
+  transition: 1.65s ease-in;
+  /* animation: displayFun 1s linear; */
+}
+
+.enemyInactive {
+  opacity: .00;
+  transition: 1.65s ease-in;
+  /* animation: displayFun 1s linear; */
+}
+
+
+.playerInactive:after {
+	filter: blur(30px);
+}
+
+
+.enemyInactive:after {
+	filter: blur(50px);
+}
+
+.playerInactive:before, .playerInactive:after {
+	content: '';
+	position: absolute;
+	left: -2px;
+	top: -2px;
+	background: linear-gradient(45deg, #0749ff, #073bca, #0633b1,#031d64, #22a7ff, #0473bd, 
+		#035d99, #023353,#022c47, #011303);
+	background-size: 400%;
+	width: calc(100% + 4px);
+	height: calc(100% + 4px);
+	z-index: -1;
+	animation: glowBG 2s linear infinite;
+}
+
+.enemyInactive:before, .enemyInactive:after {
+	content: '';
+	position: absolute;
+	left: -2px;
+	top: -2px;
+	background: linear-gradient(45deg, #200000, #5c0502, #680603,#a10803, #eb1313, #ff504a, 
+		#f0504a, #240807fa,#990702, #ff0f07);
+	background-size: 400%;
+	width: calc(100% + 4px);
+	height: calc(100% + 4px);
+	z-index: -1;
+	animation: glowBG 2s linear infinite;
+}
+
+/*
+* Health and Health Percentages
+*/
+
+.allyPerc {
+  width: 25%;
+  height: 7%;
+  position: absolute;
+  top: 8%;
+  left: 0;
+  text-align: left;
+  font-family: Arial;
+  color: white;
+  font-size: 1.9em;
+  font-weight: bold;
+  text-shadow: 3px 0px 6px black;
+}
+
+.enemyPerc {
+  width: 25%;
+  height: 7%;
+  position: absolute;
+  top: 11%;
+  right: 0;
+  text-align: right;
+  font-family: Arial;
+  color: white;
+  font-size: 1.9em;
+  font-weight: bold;
+  text-shadow: 3px 0px 6px black;
+}
+
+.allyExp {
+  width: 100%;
+  height: 10%;
+  position: absolute;
+  top: 0;
+  font-family: Arial;
+  color: white;
+  font-size: 2.5em;
+  font-weight: bold;
+  text-shadow: 3px 2px 2px black;
+}
+
+#a1Exp {
+
+}
+
+#a2Exp {
+  
+}
+
+#a3Exp {
+  
+}
+
+#a4Exp {
+  
+}
+
+#a5Exp {
+  
+}
+
+#a6Exp {
+  
+}
+
+.enemyHealth {
+  width: 15%;
+  height: 7%;
+  position: absolute;
+  top: 12%;
+  right: 16%;
+  font-family: Arial;
+  color: white;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-shadow: 3px 2px 2px black;
+}
+
+#e1Health {
+  top: 12%;
+}
+
+#e2Health {
+  top: 28%;
+}
+
+#e3Health {
+  top: 45%;
+}
+
+#e4Health {
+  top: 62%;  
+}
+
+#e5Health {
+  top: 79%;
+} 
+
+#e6Health {
+  top: 96%;
+}
+
+.allyDPS {
+  width: 14%;
+  height: 6%;
+  font-family: Arial;
+  color: mintcream;
+  font-size: 1.9em;
+  font-weight: bold;
+  text-shadow: 3px 2px 2px black;
+}
+
+.enemyDPS {
+  width: 14%;
+  height: 5%;
+  font-family: Arial;
+  color: red;
+  font-size: 1.25em;
+  font-weight: bold;
+  text-shadow: 3px 2px 2px black; 
+}
+
+#a1DPS {
+  position: absolute;
+  top: 11%;
+  left: 25%;
+  text-align: right;
+}
+
+#a2DPS{
+  position: absolute;
+  top: 28%;
+  left: 25%;
+  text-align: right;
+}
+
+#a3DPS{
+  position: absolute;
+  top: 45%;
+  left: 25%;
+  text-align: right;
+}
+
+#a4DPS{
+  position: absolute;
+  top: 62%;
+  left: 25%;
+  text-align: right;
+}
+
+#a5DPS{
+  position: absolute;
+  top: 79%;
+  left: 25%;
+  text-align: right;
+}
+
+#a6DPS{
+  position: absolute;
+  top: 96%;
+  left: 25%;
+  text-align: right;
+}
+
+#e1DPS {
+  position: absolute;
+  top: 12%;
+  right: 25%;
+  text-align: left;
+}
+
+#a1Perc {
+
+}
+
+#a2Perc, #e2Perc {
+  top: 25%;
+}
+
+#a3Perc, #e3Perc {
+  top: 42%;  
+}
+
+#a4Perc, #e4Perc {
+  top: 59%;
+}
+
+#a5Perc, #e5Perc {
+  top: 76%;
+}
+
+#a6Perc, #e6Perc {
+  top: 93%;
+}
+
+#e1Perc {
+
+}
+
+#e2Perc {
+  top: 27%;
+  
+}
+
+#e3Perc {
+  top: 43%;  
+}
+
+#e4Perc {
+  top: 60%;  
+}
+
+#e5Perc {
+  top: 78%;  
+}
+
+#e6Perc {
+  top: 94%;   
+}
+
+
+.healthLow {
+  color: red !important;
+  text-shadow: 7px 2px 2px white !important;
+  animation: smallGrowth 3s ease-in-out infinite;
+}
+
+/*
+* Stats and Skills
+*/
+.ToonSkills {
+  width: 10%;
+  height: 97.5%;
+  position: absolute;
+  top: 0%;
+  right: 40%;
+}
+
+.ToonStats {
+  width: 10%;
+  height: 97.5%;
+  position: absolute;
+  top: 0%;
+  left: 40%;
+}
+
+.statsLeft {
+  border-radius: 19%;
+  width: 98%;
+  height: 17.5%;
+  border: 2px solid white;
+  line-height: 2.5;
+  background-color: black;
+  box-shadow: 2px 0px 1px black;
+  color: white;
+}
+
+.skillsRight {
+  border-radius: 19%;
+  width: 98%;
+  height: 17.5%;
+  border: 2px solid white;
+  line-height: 2.5;
+  background-color: darkblue;
+  box-shadow: 2px 0px 1px darkblue;
+  color: white;
+}
+
+#a1Stats, #a2Stats, #a3Stats, #a4Stats, #a5Stats, #a6Stats {
+  transition: 0.25s linear;
+}
+
+#a1Stats:hover, #a2Stats:hover, #a3Stats:hover, #a4Stats:hover, #a5Stats:hover, #a6Stats:hover {
+  color: red;
+  background-color: darkblue;
+  transition: 0.25s linear;
+}
+
+.statsLeftActual {
+  display: none;
+}
+
+#a1StatsActual, #a2StatsActual, #a3StatsActual, #a4StatsActual, #a5StatsActual, #a6StatsActual {
+  display: inherit;
+} 
+
+.showHoverAnimation {
+  animation: statSkillSelection 6s linear infinite;
+}
+
+.insideStats {
+  flex-wrap: wrap;
+  width: 100%;
+  border: 5px solid red;
+  height: 85%;
+  display: flex;
+  font-size: .65em;
+  position: absolute;
+  top: 15%;
+  z-index: 0;
+}
+
+.insideStats p {
+  width: 50%;
+  border: 2px solid black;
+  height: 25%;
+  font-size: .65em;
+  z-index: 1;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.statsLarge {
+  font-size: 1.75em;
+}
