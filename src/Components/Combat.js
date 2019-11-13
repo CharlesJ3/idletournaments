@@ -3,6 +3,9 @@ import PlayerTeam from '../Components/PlayerTeam';
 import Progress from '../Components/Progress';
 import ToonStats from '../Components/ToonStats';
 import ToonSkills from '../Components/ToonSkills';
+import Header from '../Components/Header';
+import Settings from '../Components/Settings';
+import Options from '../Components/Options';
 
 export default class Combat extends React.Component {
   constructor(props) {
@@ -16,25 +19,34 @@ export default class Combat extends React.Component {
         '??',
         '???',
         '????',
-        '?????',    
+        '?????',
       ],
 
       allyLevels: [
         1,
-        20,
-        30,
-        40,
-        50,
-        60,
+        1,
+        1,
+        1,
+        1,
+        1,
       ],
 
       allyActive: [
         true,
-        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+
+      allyPurchase: [
         true,
         false,
-        false, 
-        false,   
+        false,
+        false,
+        false,
+        false,
       ],
 
      enemyClass: [
@@ -43,29 +55,33 @@ export default class Combat extends React.Component {
         '????',
         '????',
         '????',
-        '????',    
+        '????',
        ],
 
       enemyLevels: [
         1,
-        0,
-        0,
-        0,
-        0,
-        0,
+        1,
+        1,
+        1,
+        1,
+        1,
       ],
 
       enemyActive: [
         true,
-        true,
-        true,
         false,
-        false, 
-        false,   
+        false,
+        false,
+        false,
+        false,
       ],
 
       //Leveling and Experience
       expCalculator: 1.45,
+
+      //Currency
+      gold: 0,
+      rp: 0,
 
       //Player Stats
       allyOneAttackSpeed: 1.5,
@@ -77,6 +93,10 @@ export default class Combat extends React.Component {
       allyOneMaxHealth: 20,
       allyOneExp: 0,
       allyOneMaxExp: 2,
+      allyOneRezChance: 25,
+      allyOneLevelDam: .25,
+      allyOneLevelDef: .25,
+      allyOneLevelMaxHP: 1,
 
       allyTwoAttackSpeed: 1,
       allyTwoBaseAttack: 0,
@@ -87,55 +107,75 @@ export default class Combat extends React.Component {
       allyTwoMaxHealth: 20,
       allyTwoExp: 0,
       allyTwoMaxExp: 4,
+      allyTwoRezChance: 25,
+      allyTwoLevelDam: .25,
+      allyTwoLevelDef: .25,
+      allyTwoLevelMaxHP: 1,
 
       allyThrAttackSpeed: 3,
       allyThrBaseAttack: 0,
       allyThrBaseAttackCount: 0,
-      allyThrDamage: 3,
+      allyThrDamage: 1,
       allyThrDefense: 1,
       allyThrHealth: 20,
       allyThrMaxHealth: 20,
       allyThrExp: 0,
       allyThrMaxExp: 6,
+      allyThrRezChance: 25,
+      allyThrLevelDam: .25,
+      allyThrLevelDef: .25,
+      allyThrLevelMaxHP: 1,
 
       allyFouAttackSpeed: 1.5,
       allyFouBaseAttack: 0,
       allyFouBaseAttackCount: 0,
-      allyFouDamage: 1.5,
+      allyFouDamage: 1,
       allyFouDefense: 1,
       allyFouHealth: 20,
       allyFouMaxHealth: 20,
       allyFouExp: 0,
       allyFouMaxExp: 8,
+      allyFouRezChance: 25,
+      allyFouLevelDam: .25,
+      allyFouLevelDef: .25,
+      allyFouLevelMaxHP: 1,
 
       allyFivAttackSpeed: 2,
       allyFivBaseAttack: 0,
       allyFivBaseAttackCount: 0,
-      allyFivDamage: 2,
+      allyFivDamage: 1,
       allyFivDefense: 1,
       allyFivHealth: 20,
       allyFivMaxHealth: 20,
       allyFivExp: 0,
       allyFivMaxExp: 10,
+      allyFivRezChance: 25,
+      allyFivLevelDam: .25,
+      allyFivLevelDef: .25,
+      allyFivLevelMaxHP: 1,
 
       allySixAttackSpeed: 3,
       allySixBaseAttack: 0,
       allySixBaseAttackCount: 0,
-      allySixDamage: 3,
+      allySixDamage: 1,
       allySixDefense: 1,
       allySixHealth: 20,
       allySixMaxHealth: 20,
       allySixExp: 0,
       allySixMaxExp: 12,
-    
+      allySixRezChance: 25,
+      allySixLevelDam: .25,
+      allySixLevelDef: .25,
+      allySixLevelMaxHP: 1,
+
       //Enemy Team
-      enemyOneAttackSpeed: 1,
+      enemyOneAttackSpeed: 2.5,
       enemyOneBaseAttack: 0,
       enemyOneBaseAttackCount: 0,
-      enemyOneDamage: 25.5,
+      enemyOneDamage: 1,
       enemyOneDefense: 1,
-      enemyOneHealth: 10,
-      enemyOneMaxHealth: 10,
+      enemyOneHealth: 5,
+      enemyOneMaxHealth: 5,
       enemyOneExp: 0,
       enemyOneMaxExp: 25,
 
@@ -179,10 +219,10 @@ export default class Combat extends React.Component {
       enemyFivExp: 0,
       enemyFivMaxExp: 25,
 
-      enemySixAttackSpeed: .5,
+      enemySixAttackSpeed: 2.5,
       enemySixBaseAttack: 0,
       enemySixBaseAttackCount: 0,
-      enemySixDamage: 276.5,
+      enemySixDamage: 1,
       enemySixDefense: 1,
       enemySixHealth: 20,
       enemySixMaxHealth: 20,
@@ -212,16 +252,16 @@ export default class Combat extends React.Component {
   }
 
   //Count total enemies and allies; needed for a few things!
-  
+
   totalActiveAllies = () => {
-    const x = this.state.allyActive[0] + this.state.allyActive[1]+ this.state.allyActive[2] + 
+    const x = this.state.allyActive[0] + this.state.allyActive[1]+ this.state.allyActive[2] +
     this.state.allyActive[3] + this.state.allyActive[4] + this.state.allyActive[5];
 
     return x;
   }
 
   totalActiveEnemies = () => {
-    const x = this.state.enemyActive[0] + this.state.enemyActive[1]+ this.state.enemyActive[2] + 
+    const x = this.state.enemyActive[0] + this.state.enemyActive[1]+ this.state.enemyActive[2] +
     this.state.enemyActive[3] + this.state.enemyActive[4] + this.state.enemyActive[5];
 
     return x;
@@ -231,7 +271,7 @@ export default class Combat extends React.Component {
 
     //Begin Attack
     if(this.state.allyOneBaseAttackCount <= this.state.allyOneAttackSpeed && this.state.allyActive[0]){
-      this.setState({ 
+      this.setState({
         allyOneBaseAttackCount: this.state.allyOneBaseAttackCount + .250,
         allyOneBaseAttack: 100,
       });
@@ -241,134 +281,158 @@ export default class Combat extends React.Component {
 
     // Do Damage to SET TARGET
     this.attackAllyOne();
-    this.setState({ 
+    this.setState({
       allyOneBaseAttackCount: 0,
       allyOneBaseAttack: 0,
-    });    
+    });
+   } else {
+    this.setState({
+      allyOneBaseAttackCount: 0,
+      allyOneBaseAttack: 0,
+    });
    }
   }
 
 
   attack2 = () => {
-    
+
     //Begin Attack
-    if(this.state.allyTwoBaseAttackCount <= this.state.allyTwoAttackSpeed){
-      this.setState({ 
+    if(this.state.allyTwoBaseAttackCount <= this.state.allyTwoAttackSpeed && this.state.allyActive[1]){
+      this.setState({
         allyTwoBaseAttackCount: this.state.allyTwoBaseAttackCount + .250,
         allyTwoBaseAttack: 100,
       });
 
-  
-    //End Attack  
-   } else {
+    //End Attack
+   } else if (this.state.allyTwoBaseAttackCount >= this.state.allyTwoAttackSpeed) {
 
     // Do Damage to SET TARGET
     this.attackAllyTwo();
-    this.setState({ 
+    this.setState({
       allyTwoBaseAttackCount: 0,
       allyTwoBaseAttack: 0,
-    });   
-
-    
+    });
+   } else {
+    this.setState({
+      allyTwoBaseAttackCount: 0,
+      allyTwoBaseAttack: 0,
+    });
    }
   }
 
   attack3 = () => {
 
     //Begin Attack
-    if(this.state.allyThrBaseAttackCount <= this.state.allyThrAttackSpeed){
-      this.setState({ 
+    if(this.state.allyThrBaseAttackCount <= this.state.allyThrAttackSpeed && this.state.allyActive[2]){
+      this.setState({
         allyThrBaseAttackCount: this.state.allyThrBaseAttackCount + .250,
         allyThrBaseAttack: 100,
       });
 
-    //End Attack 
-   } else {
-    
+    //End Attack
+   } else if (this.state.allyThrBaseAttackCount >= this.state.allyThrAttackSpeed) {
+
     // Do Damage to SET TARGET
     this.attackAllyThr();
-    this.setState({ 
+    this.setState({
       allyThrBaseAttackCount: 0,
       allyThrBaseAttack: 0,
-    });   
-
+    });
+   } else {
+    this.setState({
+      allyThrBaseAttackCount: 0,
+      allyThrBaseAttack: 0,
+    });
    }
-   
   }
+
 
   attack4 = () => {
 
     //Begin Attack
-    if(this.state.allyFouBaseAttackCount <= this.state.allyFouAttackSpeed){
-      this.setState({ 
+    if(this.state.allyFouBaseAttackCount <= this.state.allyFouAttackSpeed && this.state.allyActive[3]){
+      this.setState({
         allyFouBaseAttackCount: this.state.allyFouBaseAttackCount + .250,
         allyFouBaseAttack: 100,
       });
 
     //End Attack
-   } else {    
-     
+   } else if (this.state.allyFouBaseAttackCount >= this.state.allyFouAttackSpeed) {
+
     // Do Damage to SET TARGET
     this.attackAllyFou();
-    this.setState({ 
+    this.setState({
       allyFouBaseAttackCount: 0,
       allyFouBaseAttack: 0,
-    });   
-
+    });
+   } else {
+    this.setState({
+      allyFouBaseAttackCount: 0,
+      allyFouBaseAttack: 0,
+    });
    }
-   
   }
+
 
   attack5 = () => {
 
     //Begin Attack
-    if(this.state.allyFivBaseAttackCount <= this.state.allyFivAttackSpeed){
-      this.setState({ 
+    if(this.state.allyFivBaseAttackCount <= this.state.allyFivAttackSpeed && this.state.allyActive[4]){
+      this.setState({
         allyFivBaseAttackCount: this.state.allyFivBaseAttackCount + .250,
         allyFivBaseAttack: 100,
       });
 
     //End Attack
-   } else {
+   } else if (this.state.allyFivBaseAttackCount >= this.state.allyFivAttackSpeed) {
+
     // Do Damage to SET TARGET
     this.attackAllyFiv();
-    this.setState({ 
+    this.setState({
       allyFivBaseAttackCount: 0,
       allyFivBaseAttack: 0,
-    });   
-
+    });
+   } else {
+    this.setState({
+      allyFivBaseAttackCount: 0,
+      allyFivBaseAttack: 0,
+    });
    }
-   
   }
+
 
   attack6 = () => {
 
     //Begin Attack
-    if(this.state.allySixBaseAttackCount <= this.state.allySixAttackSpeed){
-      this.setState({ 
+    if(this.state.allySixBaseAttackCount <= this.state.allySixAttackSpeed && this.state.allyActive[5]){
+      this.setState({
         allySixBaseAttackCount: this.state.allySixBaseAttackCount + .250,
         allySixBaseAttack: 100,
       });
 
     //End Attack
-   } else {
+   } else if (this.state.allySixBaseAttackCount >= this.state.allySixAttackSpeed) {
+
     // Do Damage to SET TARGET
     this.attackAllySix();
-    this.setState({ 
+    this.setState({
       allySixBaseAttackCount: 0,
       allySixBaseAttack: 0,
-    });   
-
+    });
+   } else {
+    this.setState({
+      allySixBaseAttackCount: 0,
+      allySixBaseAttack: 0,
+    });
    }
-
   }
 
 
   attackEnemy = () => {
-    
+
     //Begin Attack
     if(this.state.enemyOneBaseAttackCount <= this.state.enemyOneAttackSpeed && this.state.enemyActive[0]){
-      this.setState({ 
+      this.setState({
         enemyOneBaseAttackCount: this.state.enemyOneBaseAttackCount + .250,
         enemyOneBaseAttack: 100,
       });
@@ -378,61 +442,75 @@ export default class Combat extends React.Component {
 
     // Do Damage to SET TARGET
     this.attackEnemyOne();
-    this.setState({ 
+    this.setState({
       enemyOneBaseAttackCount: 0,
       enemyOneBaseAttack: 0,
-    });        
+    });
+   } else {
+    this.setState({
+      enemyOneBaseAttackCount: 0,
+      enemyOneBaseAttack: 0,
+    });
    }
   }
 
 
   attackEnemy2 = () => {
-    
+
     //Begin Attack
     if(this.state.enemyTwoBaseAttackCount <= this.state.enemyTwoAttackSpeed  && this.state.enemyActive[1]){
-      this.setState({ 
+      this.setState({
         enemyTwoBaseAttackCount: this.state.enemyTwoBaseAttackCount + .250,
         enemyTwoBaseAttack: 100,
       });
 
-  
-    //End Attack  
+
+    //End Attack
    } else if(this.state.enemyTwoBaseAttackCount >= this.state.enemyTwoAttackSpeed  && this.state.enemyActive[1]){
     this.attackEnemyTwo();
-    this.setState({ 
+    this.setState({
       enemyTwoBaseAttackCount: 0,
       enemyTwoBaseAttack: 0,
-    });   
-
+    });
+   } else {
+    this.setState({
+      enemyTwoBaseAttackCount: 0,
+      enemyTwoBaseAttack: 0,
+    });
    }
+
   }
 
   attackEnemy3 = () => {
 
     //Begin Attack
     if(this.state.enemyThrBaseAttackCount <= this.state.enemyThrAttackSpeed  && this.state.enemyActive[2]){
-      this.setState({ 
+      this.setState({
         enemyThrBaseAttackCount: this.state.enemyThrBaseAttackCount + .250,
         enemyThrBaseAttack: 100,
       });
 
-    //End Attack 
+    //End Attack
    } else if(this.state.enemyThrBaseAttackCount >= this.state.enemyThrAttackSpeed  && this.state.enemyActive[2]) {
     this.attackEnemyThr();
-    this.setState({ 
+    this.setState({
       enemyThrBaseAttackCount: 0,
       enemyThrBaseAttack: 0,
-    });   
-
+    });
    }
-   
+   else {
+    this.setState({
+      enemyThrBaseAttackCount: 0,
+      enemyThrBaseAttack: 0,
+    });
+   }
   }
 
   attackEnemy4 = () => {
 
     //Begin Attack
     if(this.state.enemyFouBaseAttackCount <= this.state.enemyFouAttackSpeed && this.state.enemyActive[3]){
-      this.setState({ 
+      this.setState({
         enemyFouBaseAttackCount: this.state.enemyFouBaseAttackCount + .250,
         enemyFouBaseAttack: 100,
       });
@@ -440,20 +518,25 @@ export default class Combat extends React.Component {
     //End Attack
    } else if(this.state.enemyFouBaseAttackCount >= this.state.enemyFouAttackSpeed && this.state.enemyActive[3]) {
     this.attackEnemyFou();
-    this.setState({ 
+    this.setState({
       enemyFouBaseAttackCount: 0,
       enemyFouBaseAttack: 0,
-    });   
+    });
 
    }
-   
+   else {
+    this.setState({
+      enemyFouBaseAttackCount: 0,
+      enemyFouBaseAttack: 0,
+    });
+   }
   }
 
   attackEnemy5 = () => {
 
     //Begin Attack
     if(this.state.enemyFivBaseAttackCount <= this.state.enemyFivAttackSpeed && this.state.enemyActive[4]){
-      this.setState({ 
+      this.setState({
         enemyFivBaseAttackCount: this.state.enemyFivBaseAttackCount + .250,
         enemyFivBaseAttack: 100,
       });
@@ -461,20 +544,25 @@ export default class Combat extends React.Component {
     //End Attack
    } else if(this.state.enemyFivBaseAttackCount >= this.state.enemyFivAttackSpeed && this.state.enemyActive[4]){
     this.attackEnemyFiv();
-    this.setState({ 
+    this.setState({
       enemyFivBaseAttackCount: 0,
       enemyFivBaseAttack: 0,
-    });   
+    });
 
+   } else {
+    this.setState({
+      enemyFivBaseAttackCount: 0,
+      enemyFivBaseAttack: 0,
+    });
    }
-   
+
   }
 
   attackEnemy6 = () => {
 
     //Begin Attack
     if(this.state.enemySixBaseAttackCount <= this.state.enemySixAttackSpeed && this.state.enemyActive[5]){
-      this.setState({ 
+      this.setState({
         enemySixBaseAttackCount: this.state.enemySixBaseAttackCount + .250,
         enemySixBaseAttack: 100,
       });
@@ -482,35 +570,19 @@ export default class Combat extends React.Component {
     //End Attack
    } else if(this.state.enemySixBaseAttackCount >= this.state.enemySixAttackSpeed && this.state.enemyActive[5]) {
     this.attackEnemySix();
-    this.setState({ 
+    this.setState({
       enemySixBaseAttackCount: 0,
       enemySixBaseAttack: 0,
-    });   
+    });
 
+   } else {
+    this.setState({
+      enemySixBaseAttackCount: 0,
+      enemySixBaseAttack: 0,
+    });
    }
 
   }
-
-
-  //This function will be the AI for controlling which enemy to fight next.
-  //Currently: Only targets first enemy on list. 
-  findTarget = () => {
-
-    if(this.state.enemyOneHealth > 0){
-      return this.state.enemyOneHealth;
-    } else if (this.state.enemyTwoHealth > 0) {
-      return this.state.enemyTwoHealth;
-    } else if (this.state.enemyThrHealth > 0) {
-      return this.state.enemyThrHealth;
-    } else if (this.state.enemyFouHealth > 0) {
-      return this.state.enemyFouHealth;
-    } else if (this.state.enemyFivHealth > 0) {
-      return this.state.enemyFivHealth;
-    } else {
-      return this.state.enemySixHealth;
-    }
-  }
-
 
   /*
   * PLAYER ATTACK
@@ -526,7 +598,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allyOneDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allyOneDamage,
@@ -556,7 +628,7 @@ export default class Combat extends React.Component {
   };
 
     attackAllyTwo = () => {
-      
+
     //Target a random enemy in the tree - TODO: This can be set to pick less randomly (0-100, 1-80 1st, 81-100 2nd)
     const rand = Math.ceil(Math.random() * this.totalActiveEnemies());
 
@@ -566,7 +638,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allyTwoDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allyTwoDamage,
@@ -596,7 +668,7 @@ export default class Combat extends React.Component {
   };
 
       attackAllyThr = () => {
-      
+
     //Target a random enemy in the tree - TODO: This can be set to pick less randomly (0-100, 1-80 1st, 81-100 2nd)
     const rand = Math.ceil(Math.random() * this.totalActiveEnemies());
 
@@ -606,7 +678,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allyThrDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allyThrDamage,
@@ -635,9 +707,9 @@ export default class Combat extends React.Component {
     }
   };
 
-  
+
   attackAllyFou = () => {
-      
+
     //Target a random enemy in the tree - TODO: This can be set to pick less randomly (0-100, 1-80 1st, 81-100 2nd)
     const rand = Math.ceil(Math.random() * this.totalActiveEnemies());
 
@@ -646,7 +718,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allyFouDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allyFouDamage,
@@ -675,9 +747,9 @@ export default class Combat extends React.Component {
     }
   };
 
-  
+
   attackAllyFiv = () => {
-      
+
     //Target a random enemy in the tree - TODO: This can be set to pick less randomly (0-100, 1-80 1st, 81-100 2nd)
     const rand = Math.ceil(Math.random() * this.totalActiveEnemies());
 
@@ -686,7 +758,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allyFivDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allyFivDamage,
@@ -716,7 +788,7 @@ export default class Combat extends React.Component {
   };
 
   attackAllySix = () => {
-      
+
     //Target a random enemy in the tree - TODO: This can be set to pick less randomly (0-100, 1-80 1st, 81-100 2nd)
     const rand = Math.ceil(Math.random() * this.totalActiveEnemies());
 
@@ -725,7 +797,7 @@ export default class Combat extends React.Component {
         enemyOneHealth: this.state.enemyOneHealth - this.state.allySixDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.enemyTwoHealth > 0 && rand === 2){
       this.setState({
         enemyTwoHealth: this.state.enemyTwoHealth - this.state.allySixDamage,
@@ -769,7 +841,7 @@ export default class Combat extends React.Component {
         allyOneHealth: this.state.allyOneHealth - this.state.enemyOneDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.allyTwoHealth > 0 && rand === 2){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemyOneDamage,
@@ -809,7 +881,7 @@ export default class Combat extends React.Component {
         allyOneHealth: this.state.allyOneHealth - this.state.enemyTwoDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.allyTwoHealth > 0 && rand === 2){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemyTwoDamage,
@@ -849,7 +921,7 @@ export default class Combat extends React.Component {
         allyThrHealth: this.state.allyOneHealth - this.state.enemyThrDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.allyTwoHealth > 0 && rand === 2){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemyThrDamage,
@@ -889,7 +961,7 @@ export default class Combat extends React.Component {
         allyOneHealth: this.state.allyOneHealth - this.state.enemyFouDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.allyTwoHealth > 0 && rand === 2){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemyFouDamage,
@@ -929,7 +1001,7 @@ export default class Combat extends React.Component {
         allyOneHealth: this.state.allyOneHealth - this.state.enemyFivDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if(this.state.allyTwoHealth > 0 && rand === 2){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemyFivDamage,
@@ -968,32 +1040,32 @@ export default class Combat extends React.Component {
         allyOneHealth: this.state.allyOneHealth - this.state.enemySixDamage,
       });
       this.checkCombatStatus();
-    } 
+    }
     else if((this.state.allyTwoHealth > 0 && rand === 2) || (this.state.allyTwoHealth > 0 && this.totalActiveAllies() <= 5)){
       this.setState({
         allyTwoHealth: this.state.allyTwoHealth - this.state.enemySixDamage,
       });
-      this.checkCombatStatus();      
+      this.checkCombatStatus();
     } else if((this.state.allyThrHealth > 0 && rand === 3) || (this.state.allyThrHealth > 0 && this.totalActiveAllies() <= 5)){
       this.setState({
         allyThrHealth: this.state.allyThrHealth - this.state.enemySixDamage,
       });
-      this.checkCombatStatus();      
+      this.checkCombatStatus();
     } else if ((this.state.allyFouHealth > 0 && rand === 4) || (this.state.allyFouHealth > 0 && this.totalActiveAllies() <= 5)){
       this.setState({
         allyFouHealth: this.state.allyFouHealth - this.state.enemySixDamage,
       });
-      this.checkCombatStatus();      
+      this.checkCombatStatus();
     } else if ((this.state.allyFivHealth > 0 && rand === 5) || (this.state.allyFivHealth > 0 && this.totalActiveAllies() <= 5)){
       this.setState({
         allyFivHealth: this.state.allyFivHealth - this.state.enemySixDamage,
       });
-      this.checkCombatStatus();      
+      this.checkCombatStatus();
     }  else if ((this.state.allySixHealth > 0 && rand === 6) || (this.state.allySixHealth > 0 && this.totalActiveAllies() <= 5)){
       this.setState({
         allySixHealth: this.state.allySixHealth - this.state.enemySixDamage,
       });
-      this.checkCombatStatus();      
+      this.checkCombatStatus();
     }
   };
 
@@ -1053,39 +1125,37 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allyOneHealth : this.state.allyOneMaxHealth});
-      this.setState({allyOneExp : this.state.allyOneExp / 4});
-    }, 14000);
+  allyOneRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 0){
-            return true;
-          } else {
-            return item; 
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allyOneHealth : this.state.allyOneMaxHealth / 3});
+    this.setState({allyOneExp : this.state.allyOneExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 0){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
 
 
   allyTwoDefeated = () => {
 
-    //First, let's map through the ally active array and set this Two enemy to active
+    //First, let's map through the ally active array and set this one enemy to active
     this.setState(state => {
       const allyActive = state.allyActive.map((item, index) => {
         if(index === 1){
@@ -1094,38 +1164,37 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allyTwoHealth : this.state.allyTwoMaxHealth});
-      this.setState({allyTwoExp : this.state.allyTwoExp / 4});
-    }, 14000);
+  allyTwoRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 1){
-            return true;
-          } else {
-            return item;
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allyTwoHealth : this.state.allyTwoMaxHealth / 3});
+    this.setState({allyTwoExp : this.state.allyTwoExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 1){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
+
 
   allyThrDefeated = () => {
 
-    //First, let's map through the ally active array and set this Thr enemy to active
+    //First, let's map through the ally active array and set this one enemy to active
     this.setState(state => {
       const allyActive = state.allyActive.map((item, index) => {
         if(index === 2){
@@ -1134,38 +1203,37 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allyThrHealth : this.state.allyThrMaxHealth});
-      this.setState({allyThrExp : this.state.allyThrExp / 4});
-    }, 14000);
+  allyThrRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 2){
-            return true;
-          } else {
-            return item;
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allyThrHealth : this.state.allyThrMaxHealth / 3});
+    this.setState({allyThrExp : this.state.allyThrExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 2){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
+
 
   allyFouDefeated = () => {
 
-    //First, let's map Fouough the ally active array and set this Fou enemy to active
+    //First, let's map through the ally active array and set this one enemy to active
     this.setState(state => {
       const allyActive = state.allyActive.map((item, index) => {
         if(index === 3){
@@ -1174,38 +1242,37 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allyFouHealth : this.state.allyFouMaxHealth});
-      this.setState({allyFouExp : this.state.allyFouExp / 4});
-    }, 14000);
+  allyFouRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 3){
-            return true;
-          } else {
-            return item;
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allyFouHealth : this.state.allyFouMaxHealth / 3});
+    this.setState({allyFouExp : this.state.allyFouExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 3){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
+
 
   allyFivDefeated = () => {
 
-    //First, let's map Fivough the ally active array and set this Fiv enemy to active
+    //First, let's map through the ally active array and set this one enemy to active
     this.setState(state => {
       const allyActive = state.allyActive.map((item, index) => {
         if(index === 4){
@@ -1214,38 +1281,37 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allyFivHealth : this.state.allyFivMaxHealth});
-      this.setState({allyFivExp : this.state.allyFivExp / 4});
-    }, 14000);
+  allyFivRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 4){
-            return true;
-          } else {
-            return item;
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allyFivHealth : this.state.allyFivMaxHealth / 3});
+    this.setState({allyFivExp : this.state.allyFivExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 4){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
+
 
   allySixDefeated = () => {
 
-    //First, let's map Sixough the ally active array and set this Six enemy to active
+    //First, let's map through the ally active array and set this one enemy to active
     this.setState(state => {
       const allyActive = state.allyActive.map((item, index) => {
         if(index === 5){
@@ -1254,50 +1320,80 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         allyActive,
       }
     });
+  }
 
-    //This setTimeout will wait for the respawn time to set them back to x% health and active
-    setTimeout ( () =>{
-      this.setState({allySixHealth : this.state.allySixMaxHealth});
-      this.setState({allySixExp : this.state.allySixExp / 4});
-    }, 14000);
+  allySixRez = () => {
 
-    setTimeout ( () =>{
-      this.setState(state => {
-        const allyActive = state.allyActive.map((item, index) => {
-          if(index === 5){
-            return true;
-          } else {
-            return item;
-          }
-        })
-        
-        return {
-          allyActive,
+    this.setState({allySixHealth : this.state.allySixMaxHealth / 3});
+    this.setState({allySixExp : this.state.allySixExp / 4});
+
+    this.setState(state => {
+      const allyActive = state.allyActive.map((item, index) => {
+        if(index === 5){
+          return true;
+        } else {
+          return item;
         }
       })
-    }, 15000);
-  } 
+
+      return {
+        allyActive,
+      }
+    });
+  }
 
   /*
   * Defeated Allies and Enemies
   */
 
   enemyOneDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
+      });
+    }
+
     this.setState({enemyOneHealth: this.state.enemyOneMaxHealth});
 
     //Check for character level ups
@@ -1312,7 +1408,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1321,7 +1417,7 @@ export default class Combat extends React.Component {
     //This setTimeout will wait for the respawn time to set them back to x% health and active
     setTimeout ( () =>{
       this.setState({enemyOneHealth: this.state.enemyOneMaxHealth});
-    }, 15000);
+    }, 2000);
 
     setTimeout ( () =>{
       this.setState(state => {
@@ -1332,26 +1428,57 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
       })
-    }, 3250);
+    }, 2000);
   }
 
 
   enemyTwoDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allyTwoExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
     this.setState({enemyTwoHealth: this.state.enemyTwoMaxHealth});
 
     //Check for character level ups
@@ -1366,7 +1493,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1386,7 +1513,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
@@ -1396,16 +1523,47 @@ export default class Combat extends React.Component {
 
 
   enemyThrDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allyThrExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[2] * 2,
+      });
+    }
     this.setState({enemyThrHealth: this.state.enemyThrMaxHealth});
 
     //Check for character level ups
@@ -1420,7 +1578,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1440,7 +1598,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
@@ -1449,16 +1607,48 @@ export default class Combat extends React.Component {
   }
 
   enemyFouDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allyFouExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[3] * 2,
+      });
+    }
+
     this.setState({enemyFouHealth: this.state.enemyFouMaxHealth});
 
     //Check for character level ups
@@ -1473,7 +1663,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1493,7 +1683,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
@@ -1502,16 +1692,47 @@ export default class Combat extends React.Component {
   }
 
   enemyFivDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allyFivExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[4] * 2,
+      });
+    }
     this.setState({enemyFivHealth: this.state.enemyFivMaxHealth});
 
     //Check for character level ups
@@ -1526,7 +1747,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1546,7 +1767,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
@@ -1556,16 +1777,48 @@ export default class Combat extends React.Component {
 
 
   enemySixDefeated = () => {
-    
-    this.setState({
-      allyOneExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyTwoExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyThrExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFouExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allyFivExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-      allySixExp: this.state.allySixExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[0] * 2,
-    });
-    
+
+    //Here we go through all of the allies to see if they are both alive and purchased. If not, they get no experience.
+    if(this.state.allyActive[0] && this.state.allyPurchase[0]) {
+      this.setState({
+        allyOneExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+    if(this.state.allyActive[1] && this.state.allyPurchase[1]) {
+      this.setState({
+        allyTwoExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[2] && this.state.allyPurchase[2]) {
+      this.setState({
+        allyThrExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[3] && this.state.allyPurchase[3]) {
+      this.setState({
+        allyFouExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[4] && this.state.allyPurchase[4]) {
+      this.setState({
+        allyFivExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
+
+    if(this.state.allyActive[5] && this.state.allyPurchase[5]) {
+      this.setState({
+        allySixExp: this.state.allyOneExp + Math.ceil(Math.random() * 5) * this.state.enemyLevels[1] * 2,
+      });
+    }
+
     this.setState({enemySixHealth: this.state.enemySixMaxHealth});
 
     //Check for character level ups
@@ -1580,7 +1833,7 @@ export default class Combat extends React.Component {
           return item;
         }
       })
-      
+
       return {
         enemyActive,
       }
@@ -1600,7 +1853,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           enemyActive,
         }
@@ -1610,7 +1863,7 @@ export default class Combat extends React.Component {
 
   /*
   * LEVELING SYSTEM
-  */ 
+  */
 
   checkForLevel = () => {
 
@@ -1626,19 +1879,26 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-        
+
         return {
           allyLevels,
         }
       });
 
-      //Some more individual state setting
+      //Determine XP for next level
       this.setState({
         allyOneExp: 0,
         allyOneMaxExp: this.state.calculateNextLevel() * this.state.allyOneMaxExp,
       });
 
+      //Stat Improvement on Level!!
+      this.setState({
+        allyOneDamage: this.state.allyOneDamage + this.state.allyOneLevelDam,
+        allyOneDefense: this.state.allyOneDefense + this.state.allyOneLevelDef,
+        allyOneMaxHealth: this.state.allyOneMaxHealth + this.state.allyOneLevelMaxHP,
+      });
     }
+
     if(this.state.allyTwoExp >= this.state.allyTwoMaxExp){
 
         //First, let's map through the array and update just the person who leveled
@@ -1651,7 +1911,7 @@ export default class Combat extends React.Component {
             return item;
           }
         })
-          
+
         return {
           allyLevels,
         }
@@ -1662,7 +1922,13 @@ export default class Combat extends React.Component {
         allyTwoExp: 0,
         allyTwoMaxExp: this.state.calculateNextLevel() * this.state.allyTwoMaxExp,
       });
-     
+
+      //Stat Improvement on Level!!
+      this.setState({
+        allyTwoDamage: this.state.allyTwoDamage + this.state.allyTwoLevelDam,
+        allyTwoDefense: this.state.allyTwoDefense + this.state.allyTwoLevelDef,
+        allyTwoMaxHealth: this.state.allyTwoMaxHealth + this.state.allyTwoLevelMaxHP,
+      });
     }
     if(this.state.allyThrExp >= this.state.allyThrMaxExp){
         //First, let's map through the array and update just the person who leveled
@@ -1675,18 +1941,24 @@ export default class Combat extends React.Component {
               return item;
             }
           })
-            
+
           return {
             allyLevels,
           }
         });
-  
+
         //Some more individual state setting
         this.setState({
           allyThrExp: 0,
           allyThrMaxExp: this.state.calculateNextLevel() * this.state.allyThrMaxExp,
         });
-       
+
+      //Stat Improvement on Level!!
+      this.setState({
+        allyThrDamage: this.state.allyThrDamage + this.state.allyThrLevelDam,
+        allyThrDefense: this.state.allyThrDefense + this.state.allyThrLevelDef,
+        allyThrMaxHealth: this.state.allyThrMaxHealth + this.state.allyThrLevelMaxHP,
+      });
     }
     if(this.state.allyFouExp >= this.state.allyFouMaxExp){
         //First, let's map through the array and update just the person who leveled
@@ -1699,19 +1971,26 @@ export default class Combat extends React.Component {
               return item;
             }
           })
-            
+
           return {
             allyLevels,
           }
         });
-  
+
         //Some more individual state setting
         this.setState({
           allyFouExp: 0,
           allyFouMaxExp: this.state.calculateNextLevel() * this.state.allyFouMaxExp,
         });
-       
+
+      //Stat Improvement on Level!!
+      this.setState({
+        allyFouDamage: this.state.allyFouDamage + this.state.allyFouLevelDam,
+        allyFouDefense: this.state.allyFouDefense + this.state.allyFouLevelDef,
+        allyFouMaxHealth: this.state.allyFouMaxHealth + this.state.allyFouLevelMaxHP,
+      });
     }
+
     if(this.state.allyFivExp >= this.state.allyFivMaxExp){
         //First, let's map through the array and update just the person who leveled
         this.setState(state => {
@@ -1723,18 +2002,24 @@ export default class Combat extends React.Component {
               return item;
             }
           })
-            
+
           return {
             allyLevels,
           }
         });
-  
+
         //Some more individual state setting
         this.setState({
           allyFivExp: 0,
           allyFivMaxExp: this.state.calculateNextLevel() * this.state.allyTwoMaxExp,
         });
-       
+
+        //Stat Improvement on Level!!
+        this.setState({
+          allyFivDamage: this.state.allyFivDamage + this.state.allyFivLevelDam,
+          allyFivDefense: this.state.allyFivDefense + this.state.allyFivLevelDef,
+          allyFivMaxHealth: this.state.allyFivMaxHealth + this.state.allyFivLevelMaxHP,
+        });
     }
     if(this.state.allySixExp >= this.state.allySixMaxExp){
         //First, let's map through the array and update just the person who leveled
@@ -1747,18 +2032,24 @@ export default class Combat extends React.Component {
               return item;
             }
           })
-            
+
           return {
             allyLevels,
           }
         });
-  
+
         //Some more individual state setting
         this.setState({
           allySixExp: 0,
           allySixMaxExp: this.state.calculateNextLevel() * this.state.allySixMaxExp,
         });
-       
+
+      //Stat Improvement on Level!!
+      this.setState({
+        allySixDamage: this.state.allySixDamage + this.state.allySixLevelDam,
+        allySixDefense: this.state.allySixDefense + this.state.allySixLevelDef,
+        allySixMaxHealth: this.state.allySixMaxHealth + this.state.allySixLevelMaxHP,
+      });
     }
   }
 
@@ -1766,12 +2057,18 @@ export default class Combat extends React.Component {
     return (
       <div className="combat">
 
-        <PlayerTeam
-          allyClass={this.state.allyClass} 
-          allyLevels={this.state.allyLevels} 
-          allyActive={this.state.allyActive} 
+      {/* Top Settings, Options, etc */}
+        <Header />
 
-          enemyClass={this.state.enemyClass} 
+        <Settings />
+        <Options />
+
+        <PlayerTeam
+          allyClass={this.state.allyClass}
+          allyLevels={this.state.allyLevels}
+          allyActive={this.state.allyActive}
+
+          enemyClass={this.state.enemyClass}
           enemyLevels={this.state.enemyLevels}
           enemyActive={this.state.enemyActive}
 
@@ -1882,12 +2179,12 @@ export default class Combat extends React.Component {
             enemySixBaseAttackCount = {this.state.enemySixBaseAttackCount}
             enemySixHealth = {this.state.enemySixHealth}
             enemySixMaxHealth = {this.state.enemySixMaxHealth}
-            enemySixDamage = {this.state.enemySixDamage} 
+            enemySixDamage = {this.state.enemySixDamage}
             enemySixDefense = {this.state.enemySixDefense} >
 
-          <Progress 
+          <Progress
             // Allies
-            allyActive={this.state.allyActive} 
+            allyActive={this.state.allyActive}
             allyOneAttackSpeed = {this.state.allyOneAttackSpeed}
             allyOneBaseAttack = {this.state.allyOneBaseAttack}
             allyOneBaseAttackCount = {this.state.allyOneBaseAttackCount}
@@ -1896,7 +2193,7 @@ export default class Combat extends React.Component {
             allyOneDamage = {this.state.allyOneDamage}
             allyOneExp = {this.state.allyOneExp}
             allyOneMaxExp = {this.state.allyOneMaxExp}
-            
+
             allyTwoAttackSpeed = {this.state.allyTwoAttackSpeed}
             allyTwoBaseAttack = {this.state.allyTwoBaseAttack}
             allyTwoBaseAttackCount = {this.state.allyTwoBaseAttackCount}
@@ -1923,7 +2220,7 @@ export default class Combat extends React.Component {
             allyFouDamage = {this.state.allyFouDamage}
             allyFouExp = {this.state.allyFouExp}
             allyFouMaxExp = {this.state.allyFouMaxExp}
-                 
+
             allyFivAttackSpeed = {this.state.allyFivAttackSpeed}
             allyFivBaseAttack = {this.state.allyFivBaseAttack}
             allyFivBaseAttackCount = {this.state.allyFivBaseAttackCount}
@@ -1957,7 +2254,7 @@ export default class Combat extends React.Component {
             enemyTwoHealth = {this.state.enemyTwoHealth}
             enemyTwoMaxHealth = {this.state.enemyTwoMaxHealth}
             enemyTwoDamage = {this.state.enemyTwoDamage}
-            
+
             enemyThrAttackSpeed = {this.state.enemyThrAttackSpeed}
             enemyThrBaseAttack = {this.state.enemyThrBaseAttack}
             enemyThrBaseAttackCount = {this.state.enemyThrBaseAttackCount}
@@ -1984,34 +2281,53 @@ export default class Combat extends React.Component {
             enemySixBaseAttackCount = {this.state.enemySixBaseAttackCount}
             enemySixHealth = {this.state.enemySixHealth}
             enemySixMaxHealth = {this.state.enemySixMaxHealth}
-            enemySixDamage = {this.state.enemySixDamage} 
-          /> 
+            enemySixDamage = {this.state.enemySixDamage}
+          />
         </PlayerTeam>
 
-        <ToonStats 
-          
-          allyClass={this.state.allyClass} 
-          allyLevels={this.state.allyLevels} 
-          allyActive={this.state.allyActive} 
+        <ToonStats
 
-          enemyClass={this.state.enemyClass} 
+          allyClass={this.state.allyClass}
+          allyLevels={this.state.allyLevels}
+          allyActive={this.state.allyActive}
+
+          enemyClass={this.state.enemyClass}
           enemyLevels={this.state.enemyLevels}
           enemyActive={this.state.enemyActive}
-          
+
           allStats={this.state}>
         </ToonStats>
-        
-        <ToonSkills           
-          allyClass={this.state.allyClass} 
-          allyLevels={this.state.allyLevels} 
-          allyActive={this.state.allyActive} 
 
-          enemyClass={this.state.enemyClass} 
+        <ToonSkills
+          allyClass={this.state.allyClass}
+          allyLevels={this.state.allyLevels}
+          allyActive={this.state.allyActive}
+
+          enemyClass={this.state.enemyClass}
           enemyLevels={this.state.enemyLevels}
           enemyActive>
 
         </ToonSkills>
 
+        <div id="rezButtons">
+          {this.state.allyActive[0] ? '' : 
+          <button onClick={this.allyOneRez} className="rezButton" id="rez1">RESURRECT</button>}
+          {this.state.allyActive[1] ? '' : 
+           <button onClick={this.allyTwoRez} className="rezButton" id="rez2">{this.state.allyPurchase[1] 
+              ? 'RESURRECT' : '|| PURCHASE || 10 Gold'}</button>}
+          {this.state.allyActive[2] ? '' : 
+          <button onClick={this.allyThrRez} className="rezButton" id="rez3">{this.state.allyPurchase[2] 
+              ? 'RESURRECT' : '|| PURCHASE || 999 Gold'}</button>}
+          {this.state.allyActive[3] ? '' : 
+          <button onClick={this.allyFouRez} className="rezButton" id="rez4">{this.state.allyPurchase[3] 
+              ? 'RESURRECT' : '|| PURCHASE || Reincarnation Points'}</button>}
+          {this.state.allyActive[4] ? '' : 
+          <button onClick={this.allyFivRez} className="rezButton" id="rez5">{this.state.allyPurchase[4] 
+              ? 'RESURRECT' : '|| PURCHASE || Reincarnation Points'}</button>}
+          {this.state.allyActive[5] ? '' : 
+          <button onClick={this.allySixRez} className="rezButton" id="rez6">{this.state.allyPurchase[5] 
+              ? 'RESURRECT' : '|| PURCHASE || ???'}</button>}
+        </div>
         {this.props.children}
       </div>
     )

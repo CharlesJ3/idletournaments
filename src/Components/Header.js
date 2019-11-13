@@ -3,7 +3,7 @@ import React from 'react';
 const Header = (props) => {
 
   const gameInfo = {
-    version: '0.1c',
+    version: '0.1a',
     title: 'Idle Tournament',
     description: '',
   }
@@ -11,13 +11,13 @@ const Header = (props) => {
   return (
     <div className="header">
       <h3>
-        {gameInfo.version} 
-        <span className="titleFun">        |-|-|-|-|-|-|-|</span> 
-        {gameInfo.title} 
+        {gameInfo.version}
+        <span className="titleFun">        |-|-|-|-|-|-|-|</span>
+        {gameInfo.title}
         <span className="titleFun">|-|-|-|-|-|</span>
         Settings
       </h3>
-      {/* {props.children} */}
+      {props.children}
     </div>
   );
 }

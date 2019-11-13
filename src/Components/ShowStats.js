@@ -11,7 +11,7 @@ const A1StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;
@@ -26,7 +26,7 @@ const A2StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;
@@ -41,7 +41,7 @@ const A3StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;
@@ -56,7 +56,7 @@ const A4StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;
@@ -71,7 +71,7 @@ const A5StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;
@@ -86,7 +86,7 @@ const A6StatsActual = styled.div`
   border: 1px solid black;
   width: 400%;
   background-color: rgba(0, 50, 149, 0.9);
-  height: 105%;
+  height: 105.5%;
   border: 3px solid black;
   font-size: 2.5em;
 `;

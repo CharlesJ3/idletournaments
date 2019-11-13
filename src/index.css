@@ -54,6 +54,9 @@ body {
   color: black;
   padding: 1%;
 
+  overflow-x: hidden;
+  overflow-y: hidden;
+
   /*Stops users from highlighting, helps visuals a bit so everything isn't anchor blue*/
   -webkit-touch-callout: none; 
     -webkit-user-select: none; 
@@ -79,8 +82,8 @@ body {
 .header {
   position: absolute;
   width: 100%;
-  height: 10%;
-  top: 0%; 
+  height: 5%;
+  top: -23%;
   border-bottom: 5px solid black;
   box-shadow: 1px 1px 3px white;
 }
@@ -94,11 +97,11 @@ body {
 *   Options
 */ 
 .options {
-  border: 4px solid black;
+  border: 1px solid black;
   position: absolute;
   width: 100%;
-  height: 10%;
-  top: 9%;
+  height: 12%;
+  top: -19%;
 }
 
 .optionSelect {
@@ -106,7 +109,6 @@ body {
   height: 100%;
   position: absolute;
   top: 0;
-  padding: 1.35%;
 }
 
 div#option1 {
@@ -130,7 +132,7 @@ div#option3 {
   font-weight: bold;
   font-size: 2em;
   border: 4px solid blue;
-  left: 66.5%;
+  left: 66.7%;
 }
 
 span.titleFun {
@@ -200,32 +202,32 @@ span.titleFun {
 
 #player1, #enemy1 {
   position: absolute;
-  top: 0;
+  top: -7%;
 }
 
 #player2, #enemy2  {
   position: absolute;
-  top: 17%;
+  top: 11%;
 }
 
 #player3, #enemy3  {
   position: absolute;
-  top: 34%;
+  top: 29%;
 }
 
 #player4, #enemy4  {
   position: absolute;
-  top: 51%;
+  top: 47%;
 }
 
 #player5, #enemy5  {
   position: absolute;
-  top: 68%;
+  top: 65%;
 }
 
 #player6, #enemy6  {
   position: absolute;
-  top: 85%;
+  top: 83%;
 }
 
 /*Progress*/
@@ -234,7 +236,7 @@ span.titleFun {
 }
 
 .playerInactive {
-  opacity: .05;
+  opacity: .02;
   transition: 1.65s ease-in;
   /* animation: displayFun 1s linear; */
 }
@@ -291,26 +293,26 @@ span.titleFun {
   width: 25%;
   height: 7%;
   position: absolute;
-  top: 8%;
+  top: 3%;
   left: 0;
   text-align: left;
   font-family: Arial;
   color: white;
-  font-size: 1.9em;
+  font-size: 1.4em;
   font-weight: bold;
   text-shadow: 3px 0px 6px black;
 }
 
 .enemyPerc {
-  width: 25%;
+  width: 13%;
   height: 7%;
   position: absolute;
-  top: 11%;
+  top: 16%;
   right: 0;
   text-align: right;
   font-family: Arial;
   color: white;
-  font-size: 1.9em;
+  font-size: 1.54em;
   font-weight: bold;
   text-shadow: 3px 0px 6px black;
 }
@@ -356,40 +358,40 @@ span.titleFun {
   height: 7%;
   position: absolute;
   top: 12%;
-  right: 16%;
+  right: 10%;
   font-family: Arial;
   color: white;
-  font-size: 1.5em;
+  font-size: 2.25em;
   font-weight: bold;
   text-shadow: 3px 2px 2px black;
 }
 
 #e1Health {
-  top: 12%;
+  top: 3%;
 }
 
 #e2Health {
-  top: 28%;
+  top: 21%;
 }
 
 #e3Health {
-  top: 45%;
+  top: 39%;
 }
 
 #e4Health {
-  top: 62%;  
+  top: 57%;  
 }
 
 #e5Health {
-  top: 79%;
+  top: 75%;
 } 
 
 #e6Health {
-  top: 96%;
+  top: 94%;
 }
 
 .allyDPS {
-  width: 14%;
+  width: 16%;
   height: 6%;
   font-family: Arial;
   color: mintcream;
@@ -400,110 +402,144 @@ span.titleFun {
 
 .enemyDPS {
   width: 14%;
-  height: 5%;
+  height: 6%;
   font-family: Arial;
-  color: red;
-  font-size: 1.25em;
+  color: lightgoldenrodyellow;
+  font-size: 1.65em;
   font-weight: bold;
   text-shadow: 3px 2px 2px black; 
 }
 
 #a1DPS {
   position: absolute;
-  top: 11%;
-  left: 25%;
+  top: 5%;
+  left: 23%;
   text-align: right;
 }
 
 #a2DPS{
   position: absolute;
-  top: 28%;
-  left: 25%;
+  top: 23%;
+  left: 23%;
   text-align: right;
 }
 
 #a3DPS{
   position: absolute;
-  top: 45%;
-  left: 25%;
+  top: 41%;
+  left: 23%;
   text-align: right;
 }
 
 #a4DPS{
   position: absolute;
-  top: 62%;
-  left: 25%;
+  top: 59%;
+  left: 23%;
   text-align: right;
 }
 
 #a5DPS{
   position: absolute;
-  top: 79%;
-  left: 25%;
+  top: 77%;
+  left: 23%;
   text-align: right;
 }
 
 #a6DPS{
   position: absolute;
   top: 96%;
-  left: 25%;
+  left: 23%;
   text-align: right;
 }
 
 #e1DPS {
   position: absolute;
-  top: 12%;
-  right: 25%;
+  top: 5.5%;
+  right: 26%;
+  text-align: left;
+}
+
+#e2DPS {
+  position: absolute;
+  top: 23.5%;
+  right: 26%;
+  text-align: left;
+}
+
+#e3DPS {
+  position: absolute;
+  top: 41.5%;
+  right: 26%;
+  text-align: left;
+}
+
+#e4DPS {
+  position: absolute;
+  top: 59%;
+  right: 26%;
+  text-align: left;
+}
+
+#e5DPS {
+  position: absolute;
+  top: 77%;
+  right: 26%;
+  text-align: left;
+}
+
+#e6DPS {
+  position: absolute;
+  top: 96%;
+  right: 26%;
   text-align: left;
 }
 
 #a1Perc {
-
+  top: 2%;
 }
 
 #a2Perc, #e2Perc {
-  top: 25%;
+  top: 20%;
 }
 
 #a3Perc, #e3Perc {
-  top: 42%;  
+  top: 38%;  
 }
 
 #a4Perc, #e4Perc {
-  top: 59%;
+  top: 56%;
 }
 
 #a5Perc, #e5Perc {
-  top: 76%;
+  top: 74%;
 }
 
 #a6Perc, #e6Perc {
-  top: 93%;
+  top: 92%;
 }
 
 #e1Perc {
-
+  top: 5%;
 }
 
 #e2Perc {
-  top: 27%;
-  
+  top: 23%;
 }
 
 #e3Perc {
-  top: 43%;  
+  top: 41%;  
 }
 
 #e4Perc {
-  top: 60%;  
+  top: 59%;  
 }
 
 #e5Perc {
-  top: 78%;  
+  top: 77%;  
 }
 
 #e6Perc {
-  top: 94%;   
+  top: 96%;   
 }
 
 
@@ -518,18 +554,20 @@ span.titleFun {
 */
 .ToonSkills {
   width: 10%;
-  height: 97.5%;
+  height: 103.5%;
   position: absolute;
-  top: 0%;
+  top: -7%;
   right: 40%;
+  z-index: 5;
 }
 
 .ToonStats {
   width: 10%;
-  height: 97.5%;
+  height: 103.5%;
   position: absolute;
-  top: 0%;
+  top: -7%;
   left: 40%;
+  z-index: 5;
 }
 
 .statsLeft {
@@ -556,6 +594,7 @@ span.titleFun {
 
 #a1Stats, #a2Stats, #a3Stats, #a4Stats, #a5Stats, #a6Stats {
   transition: 0.25s linear;
+  z-index: 5;
 }
 
 #a1Stats:hover, #a2Stats:hover, #a3Stats:hover, #a4Stats:hover, #a5Stats:hover, #a6Stats:hover {
@@ -575,6 +614,43 @@ span.titleFun {
 .showHoverAnimation {
   animation: statSkillSelection 6s linear infinite;
 }
+
+/* 
+#a1Stats {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#a2Stats {
+  position: absolute;
+  top: 20%;
+  left: 0;
+}
+
+#a3Stats {
+  position: absolute;
+  top: 40%;
+  left: 0;
+}
+
+#a4Stats {
+  position: absolute;
+  top: 60%;
+  left: 0;
+}
+
+#a5Stats {
+  position: absolute;
+  top: 80%;
+  left: 0;
+}
+
+#a6Stats {
+  position: absolute;
+  top: 99%;
+  left: 0;
+} */
 
 .insideStats {
   flex-wrap: wrap;
@@ -602,4 +678,64 @@ span.titleFun {
 
 .statsLarge {
   font-size: 1.75em;
+}
+
+/* Rez Buttons */
+
+#rezButtons {
+  position: absolute;
+  width: 12%;
+  height: 100%;
+  top: -7%;
+  left: 0;
+}
+
+.rezButton {
+  width: 191%;
+  height: 13%;
+  box-shadow: 7px -10px 3px maroon;
+  z-index: 0;
+  background-color: rgba(250, 0, 0, 0.5);
+  clip-path: polygon(0 0, 24% 25%, 51% 0, 53% 0, 75% 25%, 100% 0, 100% 100%, 74% 75%, 52% 100%, 52% 100%, 26% 71%, 0 100%);
+}
+
+#rez1 {
+  position: absolute;
+  top: 4%;
+  left: 0;
+}
+
+
+#rez2 {
+  position: absolute;
+  top: 22.5%;
+  left: 0;
+}
+
+
+#rez3 {
+  position: absolute;
+  top: 40.5%;
+  left: 0;
+}
+
+
+#rez4 {
+  position: absolute;
+  top: 58%;
+  left: 0;
+}
+
+
+#rez5 {
+  position: absolute;
+  top: 76%;
+  left: 0;
+}
+
+
+#rez6 {
+  position: absolute;
+  top: 94.5%;
+  left: 0;
 }
